@@ -1,0 +1,36 @@
+# Language setting http://docs.shippable.com/ci/languages/python/
+language: python
+
+# use this to control what branches get built.
+# http://docs.shippable.com/ci/advancedOptions/branches/
+branches:
+  only:
+    - master
+
+# using pre-defined build variables
+# full list http://docs.shippable.com/ci/advancedOptions/environmentVariables/
+env:
+  global:
+    - DOCKER_REPO=vote_fe
+    - DOCKER_ACC=avinci # {account name}
+
+build:
+
+  # http://docs.shippable.com/ci/shippableyml/#ci
+  ci:
+    - docker build -t $DOCKER_ACC/$DOCKER_REPO:$BRANCH.$BUILD_NUMBER .
+
+
+  # http://docs.shippable.com/ci/shippableyml/#post_ci
+  post_ci:
+    - docker push $DOCKER_ACC/$DOCKER_REPO:$BRANCH.$BUILD_NUMBER
+    - echo "versionName="$BRANCH.$BUILD_NUMBER > /build/state/$DOCKER_REPO.env
+
+# Integrations are used to connect external resources to CI
+# http://docs.shippable.com/integrations/overview/
+integrations:
+  # adding docker hub integration so that credentials are available to CI Job
+  # http://docs.shippable.com/integrations/imageRegistries/dockerHub/
+  hub:
+    - integrationName: demo_dh
+      type: docker
