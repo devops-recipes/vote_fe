@@ -12,7 +12,7 @@ branches:
 env:
   global:
     - DOCKER_REPO=vote_fe
-    - DOCKER_ACC=avinci # {account name}
+    - DOCKER_ACC=devopsrecipes # {account name}
 
 build:
 
@@ -32,5 +32,5 @@ integrations:
   # adding docker hub integration so that credentials are available to CI Job
   # http://docs.shippable.com/integrations/imageRegistries/dockerHub/
   hub:
-    - integrationName: demo_dh
-      type: docker
+    - integrationName: dr-dockerhub
+      type: dockerRegistryLogin
