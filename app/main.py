@@ -14,11 +14,10 @@ button2 =       app.config['VOTE2VALUE']
 title =         app.config['TITLE']
 
 # Redis configurations
-redis_server = os.environ['REDIS']
 
 # Redis Connection
 try:
-    r = redis.Redis(redis_server)
+    r = redis.StrictRedis(host="localhost", port=6379, db=0)
     r.ping()
 except redis.ConnectionError:
     exit('Failed to connect to Redis, terminating.')
