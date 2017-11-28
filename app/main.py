@@ -4,6 +4,7 @@ import random
 import redis
 import socket
 import sys
+import time
 
 app = Flask(__name__)
 
@@ -16,13 +17,22 @@ title =         app.config['TITLE']
 # Redis configurations
 #redis_server = os.environ['REDIS']
 
+time.sleep(10);
+
 #Redis Connection
-try:
-    #r = redis.Redis(redis_server)
-    r = redis.StrictRedis(host="localhost", port=6379, db=0)
-    r.ping()
-except redis.ConnectionError:
-    exit('Failed to connect to Redis, terminating.')
+count = 0
+while count < 5:
+    try:
+        #r = redis.Redis(redis_server)
+        r = redis.StrictRedis(host="redis", port=6379, db=0)
+        r.ping()
+        break
+    except redis.ConnectionError:
+        count += 1
+        time.sleep(1);
+        print('Failed to connect to Redis, terminating.')
+        if count >= 5:
+            exit('Failed to connect to Redis, terminating.')
 
 # Change title to host name to demo NLB
 if app.config['SHOWHOST'] == "true":
